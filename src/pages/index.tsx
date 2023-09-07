@@ -4,7 +4,7 @@ import Image from 'next/image';
 export default function Home() {
   return (
       <div className="flex min-h-screen w-full">
-        <div className ="lg:flex w-screen lg:w-[55%]">
+        <div className ="lg:flex lg:justify-center w-screen lg:w-[55%]">
           <div className="relative flex flex-col gap-10 lg:gap-24 py-10 lg:w-8/12">
             <div className="mx-auto flex w-10/12 lg:w-full">
               <Image
