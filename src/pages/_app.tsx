@@ -6,7 +6,6 @@ import Head from "next/head";
 import type { ReactElement, ReactNode } from "react";
 import type { NextPage } from "next";
 import type { AppProps } from "next/app";
-import Layout from "~/components/layout";
 import { Archivo } from "next/font/google";
 
 const archivo = Archivo({
@@ -14,14 +13,14 @@ const archivo = Archivo({
   variable: "--font-archivo",
 });
 
-export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
+export type NextPageWithLayout<P = NonNullable<unknown>, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
 };
 
 type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout;
 };
-const MyApp = ({ Component, pageProps }: AppPropsWithLayout) => {
+const MyApp: AppType = ({ Component, pageProps }: AppPropsWithLayout) => {
   const getLayout = Component.getLayout ?? ((page) => page);
   const layout = getLayout(<Component {...pageProps} />);
 

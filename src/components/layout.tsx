@@ -1,17 +1,6 @@
 import type { ReactNode } from "react";
 import Navbar from "./navbar";
 import Image from "next/image";
-//import { Quicksand, Source_Sans_3 } from "next/font/google";
-
-/*const quicksand = Quicksand({
-  subsets: ["latin"],
-  variable: "--font-quicksand",
-});
-
-const sourceSans3 = Source_Sans_3({
-  subsets: ["latin"],
-  variable: "--font-sourcesans3",
-});*/
 
 export default function Layout({ children }: { children: ReactNode }) {
   return (
