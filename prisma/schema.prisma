@@ -10,17 +10,16 @@ datasource db {
 model Campground {
   id          String    @id @default(auto()) @map("_id") @db.ObjectId
   name        String
-  location    String
-  price       Float
+  price       String
   description String
-  images      String[]
-  creatorId   String    @map("creatorId") @db.ObjectId
+  image      String
+  creatorId   String
 }
 
 model Review {
   id          String    @id @default(auto()) @map("_id") @db.ObjectId
   rating      Int
   text        String
-  creatorId   String    @map("creatorId") @db.ObjectId
+  creatorId   String
   campgroundId String   @map("campgroundId") @db.ObjectId
 }
