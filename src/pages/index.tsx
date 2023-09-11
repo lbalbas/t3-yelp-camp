@@ -18,9 +18,8 @@ export default function Home() {
             <Image
               alt="A camp in a hill, only visible on mobile and tablets"
               src="/Hero Image (Tablet and Mobile).jpg"
+              className="object-cover object-center"
               fill
-              objectFit="cover"
-              objectPosition="center"
             />
           </div>
           <div className="mx-auto flex w-10/12 flex-grow flex-col gap-6 lg:w-full">
