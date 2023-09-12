@@ -8,6 +8,10 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useUser } from "@clerk/nextjs";
 import LoadingBlock from '~/components/loading'
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+
+dayjs.extend(relativeTime);
 
 const CampPage: NextPageWithLayout<{ id: string }> = ({ id }) => {
 	const {data} = api.camps.getOne.useQuery({id})
@@ -53,7 +57,9 @@ const Reviews = (props: {campId: string}) => {
 						<div className="flex w-full flex-col gap-2 pb-2 border-b border-slate-300">
 							<div className="w-full flex justify-between">
 								<h3 className="font-bold text-lg">{review.author.username}</h3>
-								<span className="text-slate-600">{}</span>
+								<span className="text-slate-600">{`${dayjs().to(
+            dayjs(review.review.publishedAt)
+          )}`}</span>
 							</div>
 							<p>{review.review.text}</p>
 						</div>

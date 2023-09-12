@@ -21,5 +21,6 @@ model Review {
   rating      Int
   text        String
   creatorId   String
+  publishedAt DateTime @default(now())
   campgroundId String   @map("campgroundId") @db.ObjectId
 }
