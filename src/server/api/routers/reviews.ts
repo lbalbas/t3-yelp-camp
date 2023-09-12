@@ -1,12 +1,56 @@
+import { clerkClient } from "@clerk/nextjs/server";
 import { z } from "zod";
+import { TRPCError } from "@trpc/server";
 import {
   createTRPCRouter,
   publicProcedure,
   privateProcedure,
 } from "~/server/api/trpc";
+import { filterUserForClient } from "~/server/helpers/filterUserForClient";
+import type { Review } from "@prisma/client";
 
-export const campsRouter = createTRPCRouter({
-  getReviewsOfCamp: publicProcedure
+const addUserDataToReviews = async (reviews: Review[]) => {
+  const userId = reviews.map((review) => review.creatorId);
+  const users = (
+    await clerkClient.users.getUserList({
+      userId: userId,
+      limit: 110,
+    })
+  ).map(filterUserForClient);
+
+  return reviews.map((review) => {
+    const author = users.find((user) => user.id === review.creatorId);
+
+    if (!author) {
+      console.error("AUTHOR NOT FOUND", review);
+      throw new TRPCError({
+        code: "INTERNAL_SERVER_ERROR",
+        message: `Author for review not found. review ID: ${review.id}, USER ID: ${review.authorId}`,
+      });
+    }
+    if (!author.username) {
+      // user the ExternalUsername
+      if (!author.externalUsername) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: `Author has no GitHub Account: ${author.id}`,
+        });
+      }
+      author.username = author.externalUsername;
+    }
+    return {
+      review,
+      author: {
+        ...author,
+        username: author.username ?? "(username not found)",
+      },
+    };
+  });
+};
+
+
+export const reviewsRouter = createTRPCRouter({
+  getReviews: publicProcedure
     .input(z.object({ campId: z.string() }))
     .query(async ({ ctx, input }) => {
       const reviews = await ctx.prisma.review.findMany({
@@ -15,11 +59,9 @@ export const campsRouter = createTRPCRouter({
         },
       });
 
-      if (reviews) return reviews;
-
-      throw new Error("Something went wrong");
+      return addUserDataToReviews(reviews);
     }),
-  makeReviewOfCamp: privateProcedure
+  createReview: privateProcedure
     .input(
       z.object({
         campgroundId: z.string(),
