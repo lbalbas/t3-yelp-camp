@@ -17,9 +17,16 @@ const Camps: NextPageWithLayout = () => {
           View hand-picked campgrounds from all over the world, or add your own.
         </p>
         <div className="flex gap-2">
-          <div className="relative">
+          <div className="relative flex items-center">
+            <Image
+              className="absolute left-4"
+              src="/Search Icon.svg"
+              alt="Search Icon"
+              height={18}
+              width={18}
+            />
             <input
-              className="rounded-md border border-slate-300 px-4 py-3 pl-8"
+              className="rounded-md border border-slate-300 px-4 py-3 pl-10"
               placeholder="Search for camps"
               type="text"
             />
