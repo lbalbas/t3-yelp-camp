@@ -48,7 +48,6 @@ const addUserDataToReviews = async (reviews: Review[]) => {
   });
 };
 
-
 export const reviewsRouter = createTRPCRouter({
   getReviews: publicProcedure
     .input(z.object({ campId: z.string() }))
@@ -66,10 +65,23 @@ export const reviewsRouter = createTRPCRouter({
       z.object({
         campgroundId: z.string(),
         rating: z.number().min(1).max(5),
-        text: z.string(),
+        text: z.string().min(1),
       })
     )
-    .query(async ({ ctx, input }) => {
+    .mutation(async ({ ctx, input }) => {
+      const review = await ctx.prisma.review.findFirst({
+        where:{
+          creatorId: ctx.userId,
+          campgroundId: input.campgroundId,
+        }
+      })
+
+      if(review)
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: `Author already left a review on this camp.`,
+        });
+      
       return await ctx.prisma.review.create({
         data: {
           rating: input.rating,
