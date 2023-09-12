@@ -1,5 +1,6 @@
 import { createTRPCRouter } from "~/server/api/trpc";
 import { campsRouter } from "./routers/camps";
+import { reviewsRouter } from "./routers/reviews"
 /**
  * This is the primary router for your server.
  *
@@ -7,6 +8,7 @@ import { campsRouter } from "./routers/camps";
  */
 export const appRouter = createTRPCRouter({
   camps: campsRouter,
+  reviews: reviewsRouter,
 });
 
 // export type definition of API
