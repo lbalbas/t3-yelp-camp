@@ -67,19 +67,27 @@ export const campsRouter = createTRPCRouter({
         },
       });
 
-      if (!camp) throw new TRPCError({ code: "NOT_FOUND" })
+      if (!camp) throw new TRPCError({ code: "NOT_FOUND" });
 
-      return (await addUserDataTocamps([camp]))[0]   
+      return (await addUserDataTocamps([camp]))[0];
     }),
   search: publicProcedure
     .input(z.object({ query: z.string().min(1) }))
     .query(async ({ ctx, input }) => {
-      return await ctx.prisma.campground.findMany({
+      const search = await ctx.prisma.campground.findMany({
         where: {
           name: {
             contains: input.query,
+            mode: 'insensitive',
           },
         },
       });
+      return search;
     }),
+  create: privateProcedure.input(z.object({name: z.string().min(1), image: z.string().min(1), price: z.string().min(1), description:z.string().min(1)})).mutation(async ({ctx, input})=>{
+    const {name, image, description, price} = input;
+    return await ctx.prisma.campground.create({data:{
+      name, image, description, price, creatorId: ctx.userId
+    }})
+  })
 });
