@@ -23,20 +23,23 @@ const LeaveReview: NextPageWithLayout<{ id: string }> = ({id}) => {
       }
     },
   });
+
 	const [rating, setRating] = useState(3);
 	const [comment, setComment] = useState("");
 	
-	return(
+	return (
 		<div className="w-4/6 lg:w-3/6 flex flex-col gap-4 mx-auto">
 			<h1 className="text-2xl font-bold py-2">Add New Review</h1>
 			<RatingSelect rating={rating} setRating={setRating} />
 			<div className="flex flex-col gap-2">
-				<span className="text-sm font-bold text-slate-600">Description</span>
-				<textarea className="h-56 p-4 bg-stone-50 text-slate-600 rounded-md" placeholder="This was probably the best camp I've visited this past year, definitely recommend visiting any time soon." onChange={(e)=>{setComment(e.target.value)}} value={comment}/>
+				<label htmlFor="description" className="text-sm font-bold text-slate-600">Description</label>
+				<textarea id="description" className="h-56 p-4 bg-stone-100 text-slate-600 rounded-md" placeholder="This was probably the best camp I've visited this past year, definitely recommend visiting any time soon." onChange={(e)=>{setComment(e.target.value)}} value={comment}/>
 			</div>
-			<button disabled={isLoading} onClick={()=>{mutate({campgroundId:router.query.id, rating, text: comment})}} className="p-4 w-full flex items-center justify-center bg-black rounded-md text-white">{isLoading ? <LoadingSpinner size={24}/> : "Post Review"}</button>
-		</div>
-	)
+			<button type="submit" disabled={isLoading} onClick={()=>{
+        mutate({campgroundId: id, rating, text: comment})
+      }} className="p-4 w-full flex items-center justify-center bg-black rounded-md text-white">{isLoading ? <LoadingSpinner size={24}/> : "Post Review"}</button>
+    </div>
+	);
 }
 
 type RatingSelectProps = {
