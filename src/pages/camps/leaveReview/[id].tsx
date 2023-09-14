@@ -28,7 +28,7 @@ const LeaveReview: NextPageWithLayout<{ id: string }> = ({id}) => {
 	const [comment, setComment] = useState("");
 	
 	return (
-		<div className="w-4/6 lg:w-3/6 flex flex-col gap-4 mx-auto">
+		<div className="w-5/6 md:w-4/6 lg:w-3/6 flex flex-col gap-4 mx-auto">
 			<h1 className="text-2xl font-bold py-2">Add New Review</h1>
 			<RatingSelect rating={rating} setRating={setRating} />
 			<div className="flex flex-col gap-2">

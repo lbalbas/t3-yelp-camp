@@ -30,7 +30,7 @@ const Camps: NextPageWithLayout = () => {
         <p className="text-slate-600">
           View hand-picked campgrounds from all over the world, or add your own.
         </p>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
           <div className="relative flex items-center">
             <Image
               className="absolute left-4"
@@ -57,7 +57,7 @@ const Camps: NextPageWithLayout = () => {
       </div>
       {isLoading && <LoadingBlock size={32} />}
       {!!data && (
-        <div className="grid grid-cols-3 grid-rows-2 gap-6">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {data.map((camp) => {
             return (
               <div

@@ -20,7 +20,7 @@ const CampPage: NextPageWithLayout<{ id: string }> = ({ id }) => {
 
   return (
     <div className="flex flex-col gap-10">
-      <div className="mx-auto flex w-4/6 flex-col gap-3 rounded-md border border-slate-300 p-8">
+      <div className="mx-auto flex md:w-4/6 flex-col gap-3 rounded-md border border-slate-300 p-8">
         <Image
           className="rounded-md"
           src={data.campground.image}
@@ -48,7 +48,7 @@ const Reviews = (props: { campId: string }) => {
   if (isLoading) return <LoadingBlock size={32} />;
 
   return (
-    <div className="mx-auto flex w-4/6 flex-col items-end gap-4 rounded-md border border-slate-300 p-8">
+    <div className="mx-auto flex w-full md:w-4/6 flex-col items-end gap-4 rounded-md border border-slate-300 p-8">
       {!data || data.length == 0 ? (
         <p className="w-full text-center">
           No reviews of this camp yet, be the first!

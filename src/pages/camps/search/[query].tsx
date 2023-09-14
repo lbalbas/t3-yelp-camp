@@ -14,7 +14,7 @@ const SearchPage: NextPageWithLayout<{ query: string}> = ({ query }) => {
 	return (
 		<div className="flex flex-col">
 			<h1 className="text-2xl font-bold py-4">{`Searching for ${query}`}</h1>
-			<div className="grid grid-cols-3 gap-6">
+			<div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
 				{(!data || data.length == 0) ? (<div>{`Didn't find anything.`}</div>) : data.map(camp => {
 					return (<div
                 key={camp.id}

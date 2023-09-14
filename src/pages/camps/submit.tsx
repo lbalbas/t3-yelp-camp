@@ -32,7 +32,7 @@ const SubmitCamp: NextPageWithLayout = () => {
 	},[router, isSignedIn])
 
 	return (
-<div className="w-4/6 lg:w-3/6 flex flex-col gap-4 mx-auto">
+<div className="w-5/6 lg:w-3/6 flex flex-col gap-4 mx-auto">
 			<h1 className="text-2xl font-bold py-2">Add New Campground</h1>
 			<div className="flex flex-col gap-2">
 				<label htmlFor="Name" className="text-sm font-bold text-slate-600">Campground Name</label>
