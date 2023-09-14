@@ -6,12 +6,16 @@ import type { ReactElement } from "react";
 import Layout from "~/components/layout";
 import Image from "next/image";
 import Link from "next/link";
+import Head from 'next/head';
 
 const SearchPage: NextPageWithLayout<{ query: string }> = ({ query }) => {
   const { data } = api.camps.search.useQuery({ query });
 
   return (
     <div className="flex flex-col">
+      <Head>
+        <title>{`Searching for ${query} | YelpCamp`}</title> 
+      </Head>
       <h1 className="py-4 text-2xl font-bold">{`Searching for ${query}`}</h1>
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {!data || data.length == 0 ? (

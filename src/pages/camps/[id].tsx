@@ -10,6 +10,7 @@ import { useUser } from "@clerk/nextjs";
 import LoadingBlock from "~/components/loading";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
+import Head from 'next/head';
 
 dayjs.extend(relativeTime);
 
@@ -20,6 +21,9 @@ const CampPage: NextPageWithLayout<{ id: string }> = ({ id }) => {
 
   return (
     <div className="flex flex-col gap-10">
+      <Head>
+        <title>{data.campground.name} | YelpCamp</title>
+      </Head> 
       <div className="mx-auto flex flex-col gap-3 rounded-md border border-slate-300 p-8 md:w-4/6">
         <Image
           className="rounded-md"

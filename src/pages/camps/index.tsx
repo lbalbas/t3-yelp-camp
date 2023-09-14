@@ -8,6 +8,7 @@ import type { ReactElement } from "react";
 import Layout from "~/components/layout";
 import LoadingBlock from "~/components/loading";
 import { LoadingSpinner } from "~/components/loading";
+import Head from 'next/head';
 
 const Camps: NextPageWithLayout = () => {
   const router = useRouter();
@@ -25,6 +26,9 @@ const Camps: NextPageWithLayout = () => {
 
   return (
     <div className="flex w-full flex-col gap-12">
+      <Head>
+        <title>Search for a Camp | YelpCamp</title>
+      </Head> 
       <div className="flex flex-col gap-2 rounded-md bg-stone-100 p-10">
         <h1 className="text-3xl font-bold">Welcome to YelpCamp!</h1>
         <p className="text-slate-600">
