@@ -65,7 +65,7 @@ export const reviewsRouter = createTRPCRouter({
       z.object({
         campgroundId: z.string(),
         rating: z.number().min(1).max(5),
-        text: z.string().min(1),
+        text: z.string().min(20).max(300),
       })
     )
     .mutation(async ({ ctx, input }) => {

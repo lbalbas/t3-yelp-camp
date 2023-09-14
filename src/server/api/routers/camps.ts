@@ -89,8 +89,8 @@ export const campsRouter = createTRPCRouter({
       z.object({
         name: z.string().min(1),
         image: z.string().min(1),
-        price: z.string().min(1),
-        description: z.string().min(1),
+        price: z.string().min(2),
+        description: z.string().min(20).max(300),
       })
     )
     .mutation(async ({ ctx, input }) => {
