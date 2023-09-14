@@ -1,13 +1,13 @@
 import { api } from "~/utils/api";
-import {useState} from 'react'
+import { useState } from "react";
 import Link from "next/link";
-import {useRouter} from 'next/router';
+import { useRouter } from "next/router";
 import Image from "next/image";
 import type { NextPageWithLayout } from "../_app";
 import type { ReactElement } from "react";
 import Layout from "~/components/layout";
 import LoadingBlock from "~/components/loading";
-import {LoadingSpinner} from "~/components/loading"
+import { LoadingSpinner } from "~/components/loading";
 
 const Camps: NextPageWithLayout = () => {
   const router = useRouter();
@@ -16,12 +16,12 @@ const Camps: NextPageWithLayout = () => {
   const [isSearching, setSearchState] = useState(false);
 
   const redirectToSearch = () => {
-    if(searchQuery.length === 0)
-      return alert("Please type in the search bar first.")
-    
+    if (searchQuery.length === 0)
+      return alert("Please type in the search bar first.");
+
     setSearchState(true);
-    void router.push(`/camps/search/${searchQuery}`)
-  }
+    void router.push(`/camps/search/${searchQuery}`);
+  };
 
   return (
     <div className="flex w-full flex-col gap-12">
@@ -44,10 +44,14 @@ const Camps: NextPageWithLayout = () => {
               placeholder="Search for camps"
               type="text"
               value={searchQuery}
-              onChange={(e)=>setQuery(e.target.value)}
+              onChange={(e) => setQuery(e.target.value)}
             />
           </div>
-          <button disabled={isSearching} onClick={redirectToSearch}className="rounded-md bg-black px-4 py-3 text-white">
+          <button
+            disabled={isSearching}
+            onClick={redirectToSearch}
+            className="rounded-md bg-black px-4 py-3 text-white"
+          >
             {isSearching ? <LoadingSpinner size={18} /> : "Search"}
           </button>
         </div>
@@ -57,7 +61,7 @@ const Camps: NextPageWithLayout = () => {
       </div>
       {isLoading && <LoadingBlock size={32} />}
       {!!data && (
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {data.map((camp) => {
             return (
               <div

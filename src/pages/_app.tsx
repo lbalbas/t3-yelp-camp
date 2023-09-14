@@ -13,7 +13,10 @@ const archivo = Archivo({
   variable: "--font-archivo",
 });
 
-export type NextPageWithLayout<P = NonNullable<unknown>, IP = P> = NextPage<P, IP> & {
+export type NextPageWithLayout<P = NonNullable<unknown>, IP = P> = NextPage<
+  P,
+  IP
+> & {
   getLayout?: (page: ReactElement) => ReactNode;
 };
 

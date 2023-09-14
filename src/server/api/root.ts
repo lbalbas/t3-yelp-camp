@@ -1,6 +1,6 @@
 import { createTRPCRouter } from "~/server/api/trpc";
 import { campsRouter } from "./routers/camps";
-import { reviewsRouter } from "./routers/reviews"
+import { reviewsRouter } from "./routers/reviews";
 /**
  * This is the primary router for your server.
  *

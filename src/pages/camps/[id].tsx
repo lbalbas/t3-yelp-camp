@@ -20,7 +20,7 @@ const CampPage: NextPageWithLayout<{ id: string }> = ({ id }) => {
 
   return (
     <div className="flex flex-col gap-10">
-      <div className="mx-auto flex md:w-4/6 flex-col gap-3 rounded-md border border-slate-300 p-8">
+      <div className="mx-auto flex flex-col gap-3 rounded-md border border-slate-300 p-8 md:w-4/6">
         <Image
           className="rounded-md"
           src={data.campground.image}
@@ -48,7 +48,7 @@ const Reviews = (props: { campId: string }) => {
   if (isLoading) return <LoadingBlock size={32} />;
 
   return (
-    <div className="mx-auto flex w-full md:w-4/6 flex-col items-end gap-4 rounded-md border border-slate-300 p-8">
+    <div className="mx-auto flex w-full flex-col items-end gap-4 rounded-md border border-slate-300 p-8 md:w-4/6">
       {!data || data.length == 0 ? (
         <p className="w-full text-center">
           No reviews of this camp yet, be the first!
@@ -56,13 +56,30 @@ const Reviews = (props: { campId: string }) => {
       ) : (
         data.map((review) => {
           return (
-            <div key={review.review.id}className="flex w-full flex-col gap-2 border-b border-slate-300 pb-4">
+            <div
+              key={review.review.id}
+              className="flex w-full flex-col gap-2 border-b border-slate-300 pb-4"
+            >
               <div className="flex w-full justify-between">
-              <div className="flex items-center gap-2">
-                <h3 className="text-lg font-bold">{review.author.username}</h3>
-                <span className="flex items-center">{Array.from({ length: review.review.rating }).map((x,index)=> <Image key={index} alt="Star" src="/star.svg" height={16} width={16}/>)}</span>
-              </div>
-                <span className="text-slate-600 text-sm">{`${dayjs().to(
+                <div className="flex items-center gap-2">
+                  <h3 className="text-lg font-bold">
+                    {review.author.username}
+                  </h3>
+                  <span className="flex items-center">
+                    {Array.from({ length: review.review.rating }).map(
+                      (x, index) => (
+                        <Image
+                          key={index}
+                          alt="Star"
+                          src="/star.svg"
+                          height={16}
+                          width={16}
+                        />
+                      )
+                    )}
+                  </span>
+                </div>
+                <span className="text-sm text-slate-600">{`${dayjs().to(
                   dayjs(review.review.publishedAt)
                 )}`}</span>
               </div>

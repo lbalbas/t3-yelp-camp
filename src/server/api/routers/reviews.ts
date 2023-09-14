@@ -70,18 +70,18 @@ export const reviewsRouter = createTRPCRouter({
     )
     .mutation(async ({ ctx, input }) => {
       const review = await ctx.prisma.review.findFirst({
-        where:{
+        where: {
           creatorId: ctx.userId,
           campgroundId: input.campgroundId,
-        }
-      })
+        },
+      });
 
-      if(review)
+      if (review)
         throw new TRPCError({
           code: "UNAUTHORIZED",
           message: `Author already left a review on this camp.`,
         });
-      
+
       return await ctx.prisma.review.create({
         data: {
           rating: input.rating,

@@ -78,16 +78,31 @@ export const campsRouter = createTRPCRouter({
         where: {
           name: {
             contains: input.query,
-            mode: 'insensitive',
+            mode: "insensitive",
           },
         },
       });
       return search;
     }),
-  create: privateProcedure.input(z.object({name: z.string().min(1), image: z.string().min(1), price: z.string().min(1), description:z.string().min(1)})).mutation(async ({ctx, input})=>{
-    const {name, image, description, price} = input;
-    return await ctx.prisma.campground.create({data:{
-      name, image, description, price, creatorId: ctx.userId
-    }})
-  })
+  create: privateProcedure
+    .input(
+      z.object({
+        name: z.string().min(1),
+        image: z.string().min(1),
+        price: z.string().min(1),
+        description: z.string().min(1),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { name, image, description, price } = input;
+      return await ctx.prisma.campground.create({
+        data: {
+          name,
+          image,
+          description,
+          price,
+          creatorId: ctx.userId,
+        },
+      });
+    }),
 });

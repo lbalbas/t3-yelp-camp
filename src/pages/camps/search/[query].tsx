@@ -7,16 +7,19 @@ import Layout from "~/components/layout";
 import Image from "next/image";
 import Link from "next/link";
 
+const SearchPage: NextPageWithLayout<{ query: string }> = ({ query }) => {
+  const { data } = api.camps.search.useQuery({ query });
 
-const SearchPage: NextPageWithLayout<{ query: string}> = ({ query }) => {
-	const {data} = api.camps.search.useQuery({query});
-
-	return (
-		<div className="flex flex-col">
-			<h1 className="text-2xl font-bold py-4">{`Searching for ${query}`}</h1>
-			<div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-				{(!data || data.length == 0) ? (<div>{`Didn't find anything.`}</div>) : data.map(camp => {
-					return (<div
+  return (
+    <div className="flex flex-col">
+      <h1 className="py-4 text-2xl font-bold">{`Searching for ${query}`}</h1>
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {!data || data.length == 0 ? (
+          <div>{`Didn't find anything.`}</div>
+        ) : (
+          data.map((camp) => {
+            return (
+              <div
                 key={camp.id}
                 className="flex flex-col gap-2 rounded-md border border-slate-300 p-3"
               >
@@ -35,11 +38,13 @@ const SearchPage: NextPageWithLayout<{ query: string}> = ({ query }) => {
                 >
                   View Campground
                 </Link>
-              </div>)
-				})}
-			</div>
-		</div>
-	)
+              </div>
+            );
+          })
+        )}
+      </div>
+    </div>
+  );
 };
 
 export const getStaticProps: GetStaticProps = async (context) => {
