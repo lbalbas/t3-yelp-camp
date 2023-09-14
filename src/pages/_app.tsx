@@ -7,6 +7,7 @@ import type { ReactElement, ReactNode } from "react";
 import type { NextPage } from "next";
 import type { AppProps } from "next/app";
 import { Archivo } from "next/font/google";
+import { Toaster } from "react-hot-toast";
 
 const archivo = Archivo({
   subsets: ["latin"],
@@ -29,6 +30,16 @@ const MyApp: AppType = ({ Component, pageProps }: AppPropsWithLayout) => {
 
   return (
     <ClerkProvider {...pageProps}>
+      <Toaster
+        position={"top-center"}
+        toastOptions={{
+          duration: 5000,
+          ariaProps: {
+            role: "status",
+            "aria-live": "polite",
+          },
+        }}
+      />
       <Head>
         <title>Yelp Camp</title>
         <link rel="icon" href="/favicon.ico" />
