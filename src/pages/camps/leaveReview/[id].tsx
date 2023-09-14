@@ -7,6 +7,8 @@ import { useState, useMemo } from "react";
 import Image from "next/image";
 import { LoadingSpinner } from "~/components/loading";
 import type { GetStaticProps } from "next";
+import Head from 'next/head';
+import {toast} from 'react-hot-toast';
 
 const LeaveReview: NextPageWithLayout<{ id: string }> = ({ id }) => {
   const router = useRouter();
@@ -29,6 +31,9 @@ const LeaveReview: NextPageWithLayout<{ id: string }> = ({ id }) => {
 
   return (
     <div className="mx-auto flex w-5/6 flex-col gap-4 md:w-4/6 lg:w-3/6">
+      <Head>
+        <title>Add a Review | YelpCamp</title>
+      </Head> 
       <h1 className="py-2 text-2xl font-bold">Add New Review</h1>
       <RatingSelect rating={rating} setRating={setRating} />
       <div className="flex flex-col gap-2">
@@ -52,7 +57,11 @@ const LeaveReview: NextPageWithLayout<{ id: string }> = ({ id }) => {
         type="submit"
         disabled={isLoading}
         onClick={() => {
-          mutate({ campgroundId: id, rating, text: comment });
+          if(comment.length >= 20 && comment.length <= 200){
+            mutate({ campgroundId: id, rating, text: comment });
+          }else{
+            toast.error("Please make sure your comment is between 20 and 200 characters long.")
+          }
         }}
         className="flex w-full items-center justify-center rounded-md bg-black p-4 text-white"
       >
