@@ -60,7 +60,7 @@ const Reviews = (props: { campId: string }) => {
               <div className="flex w-full justify-between">
               <div className="flex items-center gap-2">
                 <h3 className="text-lg font-bold">{review.author.username}</h3>
-                <span className="flex items-center">{Array.from({ length: review.review.rating }).map((index)=> <Image key={index} alt="Star" src="/star.svg" height={16} width={16}/>)}</span>
+                <span className="flex items-center">{Array.from({ length: review.review.rating }).map((x,index)=> <Image key={index} alt="Star" src="/star.svg" height={16} width={16}/>)}</span>
               </div>
                 <span className="text-slate-600 text-sm">{`${dayjs().to(
                   dayjs(review.review.publishedAt)

@@ -1,4 +1,4 @@
-import { SignInButton, SignUpButton } from "@clerk/nextjs";
+import { SignInButton, SignOutButton } from "@clerk/nextjs";
 import Image from "next/image";
 import Link from "next/link";
 import { useUser } from "@clerk/nextjs";
@@ -11,23 +11,20 @@ const Navbar = () => {
       <div className="mx-auto flex w-10/12 max-w-[1440px] items-center justify-between py-6">
         <div className="flex items-center gap-6">
           <Image src="/Logo.svg" height={40} width={120} alt="Yelp Camp Logo" />
-          <Link className="text-sm font-bold text-slate-600" href="/">
+          <Link className="text-sm font-bold text-slate-600" href="/camps">
             Home
           </Link>
         </div>
         {!isSignedIn && (
           <div className="flex gap-4">
             <SignInButton>
-              <button>Login</button>
-            </SignInButton>
-            <SignUpButton>
               <button className="rounded-md bg-black px-4 py-3 text-white">
-                Create an account
+                Sign In
               </button>
-            </SignUpButton>
+            </SignInButton>
           </div>
         )}
-        {!!isSignedIn && <div className="flex gap-4">{user.firstName}</div>}
+        {!!isSignedIn && <div className="flex gap-4 text-sm text-slate-600"><span className="font-bold">{user.username}</span><SignOutButton/></div>}
       </div>
     </nav>
   );
