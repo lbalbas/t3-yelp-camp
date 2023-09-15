@@ -25,7 +25,7 @@ const addUserDataToReviews = async (reviews: Review[]) => {
       console.error("AUTHOR NOT FOUND", review);
       throw new TRPCError({
         code: "INTERNAL_SERVER_ERROR",
-        message: `Author for review not found. review ID: ${review.id}, USER ID: ${review.authorId}`,
+        message: `Author for review not found. review ID: ${review.id}, USER ID: ${review.creatorId}`,
       });
     }
     if (!author.username) {
