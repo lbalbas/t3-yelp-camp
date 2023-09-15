@@ -25,7 +25,7 @@ const addUserDataTocamps = async (camps: Campground[]) => {
       console.error("AUTHOR NOT FOUND", campground);
       throw new TRPCError({
         code: "INTERNAL_SERVER_ERROR",
-        message: `Submitter for camp not found. camp ID: ${campground.id}, USER ID: ${campground.authorId}`,
+        message: `Submitter for camp not found. camp ID: ${campground.id}, USER ID: ${campground.creatorId}`,
       });
     }
     if (!author.username) {
