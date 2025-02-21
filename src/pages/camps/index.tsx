@@ -28,7 +28,7 @@ const Camps: NextPageWithLayout = () => {
     <div className="flex w-full flex-col gap-12">
       <Head>
         <title>Search for a Camp | YelpCamp</title>
-      </Head> 
+      </Head>
       <div className="flex flex-col gap-2 rounded-md bg-stone-100 p-10">
         <h1 className="text-3xl font-bold">Welcome to YelpCamp!</h1>
         <p className="text-slate-600">
@@ -72,13 +72,14 @@ const Camps: NextPageWithLayout = () => {
                 key={camp.id}
                 className="flex flex-col gap-2 rounded-md border border-slate-300 p-3"
               >
-                <Image
-                  className="rounded-md"
-                  src={camp.image}
-                  width={385}
-                  height={200}
-                  alt={`Photo of ${camp.name}`}
-                />
+                <div className="relative h-48 md:h-52 xl:h-64">
+                  <Image
+                    className="rounded-md"
+                    src={camp.image}
+                    fill
+                    alt={`Photo of ${camp.name}`}
+                  />
+                </div>
                 <h2 className="font-bold">{camp.name}</h2>
                 <p className="text-slate-600">{camp.description}</p>
                 <Link
