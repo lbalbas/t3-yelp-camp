@@ -12,7 +12,10 @@ model Campground {
   name        String
   price       String
   description String
-  image      String
+  image       String
+  location    String?
+  lat         Float?
+  lng         Float?
   creatorId   String
 }
 

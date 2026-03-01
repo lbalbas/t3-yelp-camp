@@ -91,16 +91,39 @@ export const campsRouter = createTRPCRouter({
         image: z.string().min(1),
         price: z.string().min(2),
         description: z.string().min(20).max(300),
+        location: z.string().min(2),
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const { name, image, description, price } = input;
+      const { name, image, description, price, location } = input;
+
+      // Geocoding with OpenStreetMap Nominatim
+      let lat = null;
+      let lng = null;
+      try {
+        const res = await fetch(
+          `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(
+            location
+          )}&format=json&limit=1`
+        );
+        const data = await res.json();
+        if (data && data.length > 0) {
+          lat = parseFloat(data[0].lat);
+          lng = parseFloat(data[0].lon); // Nominatim returns 'lon' instead of 'lng'
+        }
+      } catch (error) {
+        console.error("Geocoding error:", error);
+      }
+
       return await ctx.prisma.campground.create({
         data: {
           name,
           image,
           description,
           price,
+          location,
+          lat,
+          lng,
           creatorId: ctx.userId,
         },
       });

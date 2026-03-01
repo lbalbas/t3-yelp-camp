@@ -14,6 +14,7 @@ const SubmitCamp: NextPageWithLayout = () => {
   const [name, setName] = useState("");
   const [image, setImage] = useState("");
   const [price, setPrice] = useState("");
+  const [location, setLocation] = useState("");
   const [description, setDescription] = useState("");
 
   const { mutate, isLoading } = api.camps.create.useMutation({
@@ -46,7 +47,7 @@ const isValidUrl = (urlString: string) => {
 };
 
   const validateInputs = () => {
-  	if(name.length === 0 || price.length < 2){
+  	if(name.length === 0 || price.length < 2 || location.length < 2){
   		toast.error("Please type in proper values in every field.")
   		return false;
   	}
@@ -113,6 +114,21 @@ const isValidUrl = (urlString: string) => {
         />
       </div>
       <div className="flex flex-col gap-2">
+        <label htmlFor="location" className="text-sm font-bold text-slate-600">
+          Location
+        </label>
+        <input
+          type="text"
+          id="location"
+          className="rounded-md bg-stone-100 p-2 text-slate-600"
+          placeholder="New York, NY"
+          onChange={(e) => {
+            setLocation(e.target.value);
+          }}
+          value={location}
+        />
+      </div>
+      <div className="flex flex-col gap-2">
         <label
           htmlFor="description"
           className="text-sm font-bold text-slate-600"
@@ -134,7 +150,7 @@ const isValidUrl = (urlString: string) => {
         disabled={isLoading}
         onClick={() => {
         	if(validateInputs())
-          		mutate({ name, image, price, description });
+          		mutate({ name, image, price, description, location });
         }}
         className="flex w-full items-center justify-center rounded-md bg-black p-4 text-white"
       >

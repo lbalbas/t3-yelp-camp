@@ -11,6 +11,12 @@ import LoadingBlock from "~/components/loading";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import Head from 'next/head';
+import dynamic from 'next/dynamic';
+
+const Map = dynamic(() => import("~/components/Map"), {
+  ssr: false,
+  loading: () => <p className="text-center p-4">Loading map...</p>
+});
 
 dayjs.extend(relativeTime);
 
@@ -20,26 +26,40 @@ const CampPage: NextPageWithLayout<{ id: string }> = ({ id }) => {
   if (!data) return <div> 404 - Not found</div>;
 
   return (
-    <div className="flex flex-col gap-10">
+    <div className="mx-auto flex w-full max-w-6xl flex-col gap-10 md:flex-row md:items-start p-4">
       <Head>
         <title>{data.campground.name} | YelpCamp</title>
       </Head> 
-      <div className="mx-auto flex flex-col gap-3 rounded-md border border-slate-300 p-8 md:w-4/6">
-        <Image
-          className="rounded-md"
-          src={data.campground.image}
-          alt={`Photo of ${data.campground.name}`}
-          width={1080}
-          height={675}
-        />
-        <div className="flex w-full justify-between font-bold">
-          <h1 className="text-xl">{data.campground.name}</h1>
-          <span className="text-sm">{data.campground.price}</span>
-        </div>
-        <p className="text-slate-600">{data.campground.description}</p>
-        <span className="italic text-slate-600">{`Submitted by ${data.author.username}`}</span>
+
+      {/* Left Column: Map */}
+      <div className="w-full md:w-1/3 flex flex-col gap-4 order-2 md:order-1">
+        {data.campground.lat && data.campground.lng && (
+          <div className="w-full h-80 md:h-[400px] rounded-md overflow-hidden relative z-0 border border-slate-300">
+              <Map lat={data.campground.lat} lng={data.campground.lng} popupText={data.campground.name} />
+          </div>
+        )}
       </div>
-      <Reviews campId={id} />
+
+      {/* Right Column: Campground Details & Reviews */}
+      <div className="flex w-full md:w-2/3 flex-col gap-10 order-1 md:order-2">
+        <div className="flex flex-col gap-3 rounded-md border border-slate-300 p-8">
+          <Image
+            className="rounded-md w-full h-auto object-cover"
+            src={data.campground.image}
+            alt={`Photo of ${data.campground.name}`}
+            width={1080}
+            height={675}
+          />
+          <div className="flex w-full justify-between font-bold mt-2">
+            <h1 className="text-xl">{data.campground.name}</h1>
+            <span className="text-sm">{data.campground.price}</span>
+          </div>
+          <p className="text-slate-600">{data.campground.description}</p>
+          <span className="italic text-sm text-slate-500">{`Submitted by ${data.author.username}`}</span>
+        </div>
+        <Reviews campId={id} />
+      </div>
+
     </div>
   );
 };
@@ -52,7 +72,7 @@ const Reviews = (props: { campId: string }) => {
   if (isLoading) return <LoadingBlock size={32} />;
 
   return (
-    <div className="mx-auto flex w-full flex-col items-end gap-4 rounded-md border border-slate-300 p-8 md:w-4/6">
+    <div className="flex w-full flex-col gap-4 rounded-md border border-slate-300 p-8">
       {!data || data.length == 0 ? (
         <p className="w-full text-center">
           No reviews of this camp yet, be the first!
