@@ -74,7 +74,7 @@ const Camps: NextPageWithLayout = () => {
               >
                 <div className="relative h-48 md:h-52 xl:h-64">
                   <Image
-                    className="rounded-md"
+                    className="rounded-md object-cover"
                     src={camp.image}
                     fill
                     alt={`Photo of ${camp.name}`}

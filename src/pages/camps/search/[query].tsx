@@ -27,13 +27,14 @@ const SearchPage: NextPageWithLayout<{ query: string }> = ({ query }) => {
                 key={camp.id}
                 className="flex flex-col gap-2 rounded-md border border-slate-300 p-3"
               >
-                <Image
-                  className="rounded-md"
-                  src={camp.image}
-                  width={385}
-                  height={200}
-                  alt={`Photo of ${camp.name}`}
-                />
+                <div className="relative h-48 md:h-52 xl:h-64">
+                    <Image
+                    className="rounded-md object-cover"
+                    src={camp.image}
+                    fill
+                    alt={`Photo of ${camp.name}`}
+                    />
+                </div>
                 <h2 className="font-bold">{camp.name}</h2>
                 <p className="text-slate-600">{camp.description}</p>
                 <Link
