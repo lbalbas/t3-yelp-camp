@@ -33,18 +33,20 @@ const SubmitCamp: NextPageWithLayout = () => {
     }
   }, [router, isSignedIn]);
 
-const isValidUrl = (urlString: string) => {
-  const urlPattern = new RegExp(
-    '^(http|https)://' + // protocol
-    '(([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name and extension
-    '((\\d{1,3}\\.){3}\\d{1,3})' + // OR ip (v4) address
-    '(\\:\\d+)?' + // port
-    '(\\/[-a-z\\d%_.~+]*)*' + // path
-    '(\\.[a-z\\d%_.~+]{2,4})$', // image extension
-    'i'
-  ); // case-insensitive
-  return urlPattern.test(urlString);
-};
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (file.size > 2 * 1024 * 1024) {
+        toast.error("File size must be less than 2MB");
+        return;
+      }
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImage(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   const validateInputs = () => {
   	if(name.length === 0 || price.length < 2 || location.length < 2){
@@ -52,8 +54,8 @@ const isValidUrl = (urlString: string) => {
   		return false;
   	}
 
-  	if(!isValidUrl(image)){
-  		toast.error("Please introduce a valid absolute image url for the image field, it must start with http:// or https:// and end in an image file like .png")
+  	if(image.length === 0){
+  		toast.error("Please upload an image.")
   		return false;
   	}
 
@@ -100,18 +102,18 @@ const isValidUrl = (urlString: string) => {
       </div>
       <div className="flex flex-col gap-2">
         <label htmlFor="image" className="text-sm font-bold text-slate-600">
-          Image URL
+          Upload Image
         </label>
         <input
-          type="text"
+          type="file"
           id="image"
+          accept="image/*"
           className="rounded-md bg-stone-100 p-2 text-slate-600"
-          placeholder="https://www.thepinoytraveler.com/2018/01/mt-ulap-diy-dayhike.html"
-          onChange={(e) => {
-            setImage(e.target.value);
-          }}
-          value={image}
+          onChange={handleImageChange}
         />
+        {image && (
+          <div className="mt-2 text-xs text-slate-500">Image selected</div>
+        )}
       </div>
       <div className="flex flex-col gap-2">
         <label htmlFor="location" className="text-sm font-bold text-slate-600">
