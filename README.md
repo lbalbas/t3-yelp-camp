@@ -1,28 +1,71 @@
-# Create T3 App
+# YelpCamp 🏕️
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+YelpCamp is a full-stack web application that allows users to discover, share, and review the best camping spots from around the world. It features a modern design, interactive maps, and a seamless user experience.
 
-## What's next? How do I make an app with this?
+## ✨ Features
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+- **Discover:** Browse a curated list of featured campgrounds.
+- **Search:** Find specific campgrounds using the search bar.
+- **Contribute:** Add your own campground suggestions with images and descriptions.
+- **Review:** Share your experiences by leaving reviews and star ratings.
+- **Manage:** Edit or delete your own campground submissions and reviews.
+- **Maps:** View precise campground locations with integrated interactive maps.
+- **Secure Auth:** User authentication powered by [Clerk](https://clerk.com/).
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+## 🛠️ Tech Stack
 
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
+This project is built using the **[T3 Stack](https://create.t3.gg/)**:
 
-## Learn More
+- **Framework:** [Next.js](https://nextjs.org) (Pages Router)
+- **Language:** [TypeScript](https://www.typescriptlang.org/)
+- **ORM:** [Prisma](https://prisma.io)
+- **Styling:** [Tailwind CSS](https://tailwindcss.com)
+- **API:** [tRPC](https://trpc.io)
+- **Database:** PostgreSQL (via Prisma)
+- **Auth:** [Clerk](https://clerk.com/)
+- **Maps:** [Leaflet](https://leafletjs.org/)
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
+## 🚀 Getting Started
 
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
+### Prerequisites
 
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
+- Node.js installed
+- Pnpm or Npm
+- A Clerk account for authentication
+- A database provider (e.g., Supabase, Neon)
 
-## How do I deploy this?
+### Installation
 
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+1. **Clone the repository:**
+   ```bash
+   git clone <repository-url>
+   cd t3-yelp-camp
+   ```
+
+2. **Install dependencies:**
+   ```bash
+   pnpm install
+   ```
+
+3. **Set up environment variables:**
+   Create a `.env` file based on `.env.example`:
+   ```bash
+   cp .env.example .env
+   ```
+   Fill in your database URL and Clerk API keys.
+
+4. **Prepare the database:**
+   ```bash
+   npx prisma db push
+   ```
+
+5. **Start the development server:**
+   ```bash
+   pnpm run dev
+   ```
+
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+## 📄 License
+
+This project is open-source and available under the MIT License.
