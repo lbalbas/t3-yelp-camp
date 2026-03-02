@@ -124,8 +124,84 @@ export const campsRouter = createTRPCRouter({
           location,
           lat,
           lng,
+          averageRating: 0,
           creatorId: ctx.userId,
         },
+      });
+    }),
+  update: privateProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        name: z.string().min(1),
+        image: z.string().min(1),
+        price: z.string().min(2),
+        description: z.string().min(20).max(300),
+        location: z.string().min(2),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const camp = await ctx.prisma.campground.findUnique({
+        where: { id: input.id },
+      });
+
+      if (!camp || camp.creatorId !== ctx.userId) {
+        throw new TRPCError({ code: "UNAUTHORIZED" });
+      }
+
+      const { name, image, description, price, location } = input;
+
+      // Geocoding with OpenStreetMap Nominatim
+      let lat = camp.lat;
+      let lng = camp.lng;
+      if (location !== camp.location) {
+        try {
+          const res = await fetch(
+            `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(
+              location
+            )}&format=json&limit=1`
+          );
+          const data = await res.json();
+          if (data && data.length > 0) {
+            lat = parseFloat(data[0].lat);
+            lng = parseFloat(data[0].lon);
+          }
+        } catch (error) {
+          console.error("Geocoding error:", error);
+        }
+      }
+
+      return await ctx.prisma.campground.update({
+        where: { id: input.id },
+        data: {
+          name,
+          image,
+          description,
+          price,
+          location,
+          lat,
+          lng,
+        },
+      });
+    }),
+  delete: privateProcedure
+    .input(z.object({ id: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const camp = await ctx.prisma.campground.findUnique({
+        where: { id: input.id },
+      });
+
+      if (!camp || camp.creatorId !== ctx.userId) {
+        throw new TRPCError({ code: "UNAUTHORIZED" });
+      }
+
+      // Delete associated reviews
+      await ctx.prisma.review.deleteMany({
+        where: { campgroundId: input.id },
+      });
+
+      return await ctx.prisma.campground.delete({
+        where: { id: input.id },
       });
     }),
 });
