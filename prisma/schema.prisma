@@ -13,10 +13,11 @@ model Campground {
   price       String
   description String
   image       String
-  location    String?
-  lat         Float?
-  lng         Float?
-  creatorId   String
+  location      String?
+  lat           Float?
+  lng           Float?
+  averageRating Float     @default(0)
+  creatorId     String
 }
 
 model Review {

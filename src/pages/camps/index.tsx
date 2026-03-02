@@ -80,8 +80,18 @@ const Camps: NextPageWithLayout = () => {
                     alt={`Photo of ${camp.name}`}
                   />
                 </div>
-                <h2 className="font-bold">{camp.name}</h2>
-                <p className="text-slate-600">{camp.description}</p>
+                <div className="flex items-center justify-between">
+                  <h2 className="font-bold">{camp.name}</h2>
+                  {camp.averageRating > 0 && (
+                    <div className="flex items-center gap-1">
+                      <Image alt="Star" src="/star.svg" height={14} width={14} />
+                      <span className="text-sm text-slate-500">
+                        {camp.averageRating.toFixed(1)}
+                      </span>
+                    </div>
+                  )}
+                </div>
+                <p className="text-slate-600 truncate">{camp.description}</p>
                 <Link
                   className="w-full rounded-md border border-slate-300 py-2 text-center font-bold"
                   href={`/camps/${camp.id}`}
