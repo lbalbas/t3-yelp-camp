@@ -82,7 +82,11 @@ export const reviewsRouter = createTRPCRouter({
           message: `Author already left a review on this camp.`,
         });
 
-      return await ctx.prisma.review.create({
+      const reviewCount = await ctx.prisma.review.count({
+        where: { campgroundId: input.campgroundId },
+      });
+
+      const campReview = await ctx.prisma.review.create({
         data: {
           rating: input.rating,
           campgroundId: input.campgroundId,
@@ -90,5 +94,90 @@ export const reviewsRouter = createTRPCRouter({
           creatorId: ctx.userId,
         },
       });
+
+      // Update average rating
+      const aggregate = await ctx.prisma.review.aggregate({
+        where: { campgroundId: input.campgroundId },
+        _avg: { rating: true },
+      });
+
+      await ctx.prisma.campground.update({
+        where: { id: input.campgroundId },
+        data: {
+          averageRating: aggregate._avg.rating ?? 0,
+        },
+      });
+
+      return campReview;
+    }),
+  updateReview: privateProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        rating: z.number().min(1).max(5),
+        text: z.string().min(20).max(300),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const review = await ctx.prisma.review.findUnique({
+        where: { id: input.id },
+      });
+
+      if (!review || review.creatorId !== ctx.userId) {
+        throw new TRPCError({ code: "UNAUTHORIZED" });
+      }
+
+      const updatedReview = await ctx.prisma.review.update({
+        where: { id: input.id },
+        data: {
+          rating: input.rating,
+          text: input.text,
+        },
+      });
+
+      // Update average rating
+      const aggregate = await ctx.prisma.review.aggregate({
+        where: { campgroundId: review.campgroundId },
+        _avg: { rating: true },
+      });
+
+      await ctx.prisma.campground.update({
+        where: { id: review.campgroundId },
+        data: {
+          averageRating: aggregate._avg.rating ?? 0,
+        },
+      });
+
+      return updatedReview;
+    }),
+  deleteReview: privateProcedure
+    .input(z.object({ id: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const review = await ctx.prisma.review.findUnique({
+        where: { id: input.id },
+      });
+
+      if (!review || review.creatorId !== ctx.userId) {
+        throw new TRPCError({ code: "UNAUTHORIZED" });
+      }
+
+      await ctx.prisma.review.delete({
+        where: { id: input.id },
+      });
+
+      // Update average rating
+      const aggregate = await ctx.prisma.review.aggregate({
+        where: { campgroundId: review.campgroundId },
+        _avg: { rating: true },
+      });
+
+      await ctx.prisma.campground.update({
+        where: { id: review.campgroundId },
+        data: {
+          averageRating: aggregate._avg.rating ?? 0,
+        },
+      });
+
+      return { success: true };
     }),
 });

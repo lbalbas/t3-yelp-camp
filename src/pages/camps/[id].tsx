@@ -12,6 +12,8 @@ import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import Head from 'next/head';
 import dynamic from 'next/dynamic';
+import { useRouter } from "next/router";
+import { toast } from "react-hot-toast";
 
 const Map = dynamic(() => import("~/components/Map"), {
   ssr: false,
@@ -51,11 +53,36 @@ const CampPage: NextPageWithLayout<{ id: string }> = ({ id }) => {
             height={675}
           />
           <div className="flex w-full justify-between font-bold mt-2">
-            <h1 className="text-xl">{data.campground.name}</h1>
+            <div className="flex flex-col">
+              <h1 className="text-xl">{data.campground.name}</h1>
+              {data.campground.averageRating > 0 && (
+                <div className="flex items-center gap-1">
+                  {Array.from({ length: Math.round(data.campground.averageRating) }).map((_, i) => (
+                    <Image key={i} alt="Star" src="/star.svg" height={16} width={16} />
+                  ))}
+                  <span className="text-sm font-normal text-slate-500 ml-1">
+                    ({data.campground.averageRating.toFixed(1)})
+                  </span>
+                </div>
+              )}
+            </div>
             <span className="text-sm">{data.campground.price}</span>
           </div>
           <p className="text-slate-600">{data.campground.description}</p>
-          <span className="italic text-sm text-slate-500">{`Submitted by ${data.author.username}`}</span>
+          <div className="flex justify-between items-center mt-2">
+            <span className="italic text-sm text-slate-500">{`Submitted by ${data.author.username}`}</span>
+            {useUser().user?.id === data.campground.creatorId && (
+              <div className="flex gap-2">
+                <Link
+                  href={`/camps/edit/${id}`}
+                  className="rounded-md bg-yellow-500 px-3 py-1 text-xs text-white"
+                >
+                  Edit
+                </Link>
+                <DeleteCampButton id={id} />
+              </div>
+            )}
+          </div>
         </div>
         <Reviews campId={id} />
       </div>
@@ -64,10 +91,46 @@ const CampPage: NextPageWithLayout<{ id: string }> = ({ id }) => {
   );
 };
 
+const DeleteCampButton = (props: { id: string }) => {
+  const router = useRouter();
+  const { mutate, isLoading } = api.camps.delete.useMutation({
+    onSuccess: () => {
+      toast.success("Campground deleted successfully");
+      void router.push("/camps");
+    },
+    onError: (err) => {
+      toast.error(err.message);
+    },
+  });
+
+  return (
+    <button
+      disabled={isLoading}
+      onClick={() => {
+        if (confirm("Are you sure you want to delete this campground?")) {
+          mutate({ id: props.id });
+        }
+      }}
+      className="rounded-md bg-red-500 px-3 py-1 text-xs text-white"
+    >
+      {isLoading ? "Deleting..." : "Delete"}
+    </button>
+  );
+};
+
 const Reviews = (props: { campId: string }) => {
   const { campId } = props;
-  const { isSignedIn } = useUser();
+  const { isSignedIn, user } = useUser();
+  const utils = api.useContext();
   const { data, isLoading } = api.reviews.getReviews.useQuery({ campId });
+
+  const { mutate: deleteReview, isLoading: isDeletingReview } = api.reviews.deleteReview.useMutation({
+    onSuccess: () => {
+      toast.success("Review deleted");
+      void utils.reviews.getReviews.invalidate({ campId });
+      void utils.camps.getOne.invalidate({ id: campId });
+    },
+  });
 
   if (isLoading) return <LoadingBlock size={32} />;
 
@@ -108,6 +171,21 @@ const Reviews = (props: { campId: string }) => {
                 )}`}</span>
               </div>
               <p className="text-slate-600">{review.review.text}</p>
+              {user?.id === review.review.creatorId && (
+                <div className="mt-2 flex gap-2 self-end">
+                  <button
+                    disabled={isDeletingReview}
+                    onClick={() => {
+                      if (confirm("Delete this review?")) {
+                        deleteReview({ id: review.review.id });
+                      }
+                    }}
+                    className="text-xs text-red-500 hover:underline"
+                  >
+                    Delete Review
+                  </button>
+                </div>
+              )}
             </div>
           );
         })
