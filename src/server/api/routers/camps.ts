@@ -49,15 +49,44 @@ const addUserDataTocamps = async (camps: Campground[]) => {
 };
 
 export const campsRouter = createTRPCRouter({
-  getFeatured: publicProcedure.query(async ({ ctx }) => {
-    const camps = await ctx.prisma.campground.findMany({
-      take: 6,
+  getTopRated: publicProcedure.query(async ({ ctx }) => {
+    return await ctx.prisma.campground.findMany({
+      orderBy: { averageRating: "desc" },
+      take: 3,
     });
-
-    if (camps) return camps;
-
-    throw new Error("Something went wrong");
   }),
+  list: publicProcedure
+    .input(
+      z.object({
+        limit: z.number().min(1).max(100).nullish(),
+        cursor: z.string().nullish(),
+        sort: z.enum(["newest", "topRated"]).nullish(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const limit = input.limit ?? 9;
+      const { cursor, sort } = input;
+
+      const items = await ctx.prisma.campground.findMany({
+        take: limit + 1,
+        cursor: cursor ? { id: cursor } : undefined,
+        orderBy:
+          sort === "topRated"
+            ? [{ averageRating: "desc" }, { id: "desc" }]
+            : { id: "desc" },
+      });
+
+      let nextCursor: typeof cursor | undefined = undefined;
+      if (items.length > limit) {
+        const nextItem = items.pop();
+        nextCursor = nextItem?.id;
+      }
+
+      return {
+        items,
+        nextCursor,
+      };
+    }),
   getOne: publicProcedure
     .input(z.object({ id: z.string() }))
     .query(async ({ ctx, input }) => {
