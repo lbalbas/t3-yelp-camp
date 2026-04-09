@@ -21,7 +21,7 @@ This project is built using the **[T3 Stack](https://create.t3.gg/)**:
 - **ORM:** [Prisma](https://prisma.io)
 - **Styling:** [Tailwind CSS](https://tailwindcss.com)
 - **API:** [tRPC](https://trpc.io)
-- **Database:** PostgreSQL (via Prisma)
+- **Database:** MongoDB (via Prisma)
 - **Auth:** [Clerk](https://clerk.com/)
 - **Maps:** [Leaflet](https://leafletjs.org/)
 
@@ -32,7 +32,7 @@ This project is built using the **[T3 Stack](https://create.t3.gg/)**:
 - Node.js installed
 - Pnpm or Npm
 - A Clerk account for authentication
-- A database provider (e.g., Supabase, Neon)
+- A MongoDB database (e.g., MongoDB Atlas)
 
 ### Installation
 
@@ -52,7 +52,7 @@ This project is built using the **[T3 Stack](https://create.t3.gg/)**:
    ```bash
    cp .env.example .env
    ```
-   Fill in your database URL and Clerk API keys.
+   Fill in your MongoDB connection string and Clerk API keys.
 
 4. **Prepare the database:**
    ```bash
@@ -69,3 +69,4 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 ## 📄 License
 
 This project is open-source and available under the MIT License.
+
